@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace KholenkovTest\DataValidator\Ru;
+namespace KholenkovTest\DataValidator\Russia;
 
 use InvalidArgumentException;
-use Kholenkov\DataValidator\Ru\TaxpayerCode;
+use Kholenkov\DataValidator\Russia\LegalEntityCode;
 use PHPUnit\Framework\TestCase;
 
-class TaxpayerCodeTest extends TestCase
+class LegalEntityCodeTest extends TestCase
 {
     /**
      * @dataProvider getDataProviderForIsValid
      */
     public function testIsValid(string $code): void
     {
-        self::assertTrue(TaxpayerCode::isValid($code));
+        self::assertTrue(LegalEntityCode::isValid($code));
     }
 
     /**
@@ -25,9 +25,9 @@ class TaxpayerCodeTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionCode(1);
-        $this->expectExceptionMessage('Empty taxpayer code');
+        $this->expectExceptionMessage('Empty legal entity code');
 
-        TaxpayerCode::isValid($code);
+        LegalEntityCode::isValid($code);
     }
 
     /**
@@ -37,9 +37,9 @@ class TaxpayerCodeTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionCode(4);
-        $this->expectExceptionMessage('Incorrect check digit of taxpayer code');
+        $this->expectExceptionMessage('Incorrect check digit of legal entity code');
 
-        TaxpayerCode::isValid($code);
+        LegalEntityCode::isValid($code);
     }
 
     /**
@@ -49,9 +49,9 @@ class TaxpayerCodeTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionCode(2);
-        $this->expectExceptionMessage('Taxpayer code can only consist of digits');
+        $this->expectExceptionMessage('Legal entity code can only consist of digits');
 
-        TaxpayerCode::isValid($code);
+        LegalEntityCode::isValid($code);
     }
 
     /**
@@ -61,19 +61,16 @@ class TaxpayerCodeTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionCode(3);
-        $this->expectExceptionMessage('Taxpayer code can only consist of 10 or 12 digits');
+        $this->expectExceptionMessage('Legal entity code can only consist of 13 digits');
 
-        TaxpayerCode::isValid($code);
+        LegalEntityCode::isValid($code);
     }
 
     public static function getDataProviderForIsValid(): array
     {
         return [
-            ['0000000000'],
-            ['7827004526'],
-
-            ['000000000000'],
-            ['760307073214'],
+            ['0000000000000'],
+            ['1027812400868'],
         ];
     }
 
@@ -88,17 +85,11 @@ class TaxpayerCodeTest extends TestCase
     public static function getDataProviderForIsValidWhenIncorrectCheckDigit(): array
     {
         return [
-            ['0123456789'],
-            ['1234567890'],
-            ['8827004526'],
-            ['7837004526'],
-            ['7827104526'],
-
-            ['012345678901'],
-            ['123456789012'],
-            ['860307073214'],
-            ['761307073214'],
-            ['760317073214'],
+            ['0123456789012'],
+            ['1234567890123'],
+            ['2027812400868'],
+            ['1037812400868'],
+            ['1027912400868'],
         ];
     }
 
@@ -117,15 +108,12 @@ class TaxpayerCodeTest extends TestCase
     public static function getDataProviderForIsValidWhenInvalidLength(): array
     {
         return [
-            ['000000000'],
-            ['012345678'],
-            ['123456789'],
-            ['00000000000'],
-            ['01234567890'],
-            ['12345678901'],
-            ['0000000000000'],
-            ['0123456789012'],
-            ['1234567890123'],
+            ['000000000000'],
+            ['012345678901'],
+            ['123456789012'],
+            ['00000000000000'],
+            ['01234567890123'],
+            ['12345678901234'],
         ];
     }
 }

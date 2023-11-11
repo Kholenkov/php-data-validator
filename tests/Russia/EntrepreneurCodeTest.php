@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace KholenkovTest\DataValidator\Ru;
+namespace KholenkovTest\DataValidator\Russia;
 
 use InvalidArgumentException;
-use Kholenkov\DataValidator\Ru\BankCode;
+use Kholenkov\DataValidator\Russia\EntrepreneurCode;
 use PHPUnit\Framework\TestCase;
 
-class BankCodeTest extends TestCase
+class EntrepreneurCodeTest extends TestCase
 {
     /**
      * @dataProvider getDataProviderForIsValid
      */
     public function testIsValid(string $code): void
     {
-        self::assertTrue(BankCode::isValid($code));
+        self::assertTrue(EntrepreneurCode::isValid($code));
     }
 
     /**
@@ -25,9 +25,21 @@ class BankCodeTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionCode(1);
-        $this->expectExceptionMessage('Empty bank code');
+        $this->expectExceptionMessage('Empty entrepreneur code');
 
-        BankCode::isValid($code);
+        EntrepreneurCode::isValid($code);
+    }
+
+    /**
+     * @dataProvider getDataProviderForIsValidWhenIncorrectCheckDigit
+     */
+    public function testIsValidWhenIncorrectCheckDigit(string $code): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionCode(4);
+        $this->expectExceptionMessage('Incorrect check digit of entrepreneur code');
+
+        EntrepreneurCode::isValid($code);
     }
 
     /**
@@ -37,9 +49,9 @@ class BankCodeTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionCode(2);
-        $this->expectExceptionMessage('Bank code can only consist of digits');
+        $this->expectExceptionMessage('Entrepreneur code can only consist of digits');
 
-        BankCode::isValid($code);
+        EntrepreneurCode::isValid($code);
     }
 
     /**
@@ -49,17 +61,16 @@ class BankCodeTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionCode(3);
-        $this->expectExceptionMessage('Bank code can only consist of 9 digits');
+        $this->expectExceptionMessage('Entrepreneur code can only consist of 15 digits');
 
-        BankCode::isValid($code);
+        EntrepreneurCode::isValid($code);
     }
 
     public static function getDataProviderForIsValid(): array
     {
         return [
-            ['000000000'],
-            ['012345678'],
-            ['123456789'],
+            ['000000000000000'],
+            ['307760324100018'],
         ];
     }
 
@@ -68,6 +79,17 @@ class BankCodeTest extends TestCase
         return [
             [''],
             ['0'],
+        ];
+    }
+
+    public static function getDataProviderForIsValidWhenIncorrectCheckDigit(): array
+    {
+        return [
+            ['012345678901234'],
+            ['123456789012345'],
+            ['407760324100018'],
+            ['308760324100018'],
+            ['307770324100018'],
         ];
     }
 
@@ -86,10 +108,12 @@ class BankCodeTest extends TestCase
     public static function getDataProviderForIsValidWhenInvalidLength(): array
     {
         return [
-            ['01234567'],
-            ['12345678'],
-            ['0123456789'],
-            ['1234567890'],
+            ['00000000000000'],
+            ['01234567890123'],
+            ['12345678901234'],
+            ['0000000000000000'],
+            ['0123456789012345'],
+            ['1234567890123456'],
         ];
     }
 }

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace KholenkovTest\DataValidator\Ru;
+namespace KholenkovTest\DataValidator\Russia;
 
 use InvalidArgumentException;
-use Kholenkov\DataValidator\Ru\CorrespondentAccount;
+use Kholenkov\DataValidator\Russia\CorrespondentAccount;
 use PHPUnit\Framework\TestCase;
 
 class CorrespondentAccountTest extends TestCase

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace KholenkovTest\DataValidator\Ru;
+namespace KholenkovTest\DataValidator\Russia;
 
 use InvalidArgumentException;
-use Kholenkov\DataValidator\Ru\TaxpayerRegistrationReasonCode;
+use Kholenkov\DataValidator\Russia\TaxpayerRegistrationReasonCode;
 use PHPUnit\Framework\TestCase;
 
 class TaxpayerRegistrationReasonCodeTest extends TestCase

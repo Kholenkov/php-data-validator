@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace KholenkovTest\DataValidator\Ru;
+namespace KholenkovTest\DataValidator\Russia;
 
 use InvalidArgumentException;
-use Kholenkov\DataValidator\Ru\SocialInsuranceCode;
+use Kholenkov\DataValidator\Russia\TaxpayerCode;
 use PHPUnit\Framework\TestCase;
 
-class SocialInsuranceCodeTest extends TestCase
+class TaxpayerCodeTest extends TestCase
 {
     /**
      * @dataProvider getDataProviderForIsValid
      */
     public function testIsValid(string $code): void
     {
-        self::assertTrue(SocialInsuranceCode::isValid($code));
+        self::assertTrue(TaxpayerCode::isValid($code));
     }
 
     /**
@@ -25,9 +25,9 @@ class SocialInsuranceCodeTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionCode(1);
-        $this->expectExceptionMessage('Empty social insurance code');
+        $this->expectExceptionMessage('Empty taxpayer code');
 
-        SocialInsuranceCode::isValid($code);
+        TaxpayerCode::isValid($code);
     }
 
     /**
@@ -37,9 +37,9 @@ class SocialInsuranceCodeTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionCode(4);
-        $this->expectExceptionMessage('Incorrect check digit of social insurance code');
+        $this->expectExceptionMessage('Incorrect check digit of taxpayer code');
 
-        SocialInsuranceCode::isValid($code);
+        TaxpayerCode::isValid($code);
     }
 
     /**
@@ -49,9 +49,9 @@ class SocialInsuranceCodeTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionCode(2);
-        $this->expectExceptionMessage('Social insurance code can only consist of digits');
+        $this->expectExceptionMessage('Taxpayer code can only consist of digits');
 
-        SocialInsuranceCode::isValid($code);
+        TaxpayerCode::isValid($code);
     }
 
     /**
@@ -61,17 +61,19 @@ class SocialInsuranceCodeTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionCode(3);
-        $this->expectExceptionMessage('Social insurance code can only consist of 11 digits');
+        $this->expectExceptionMessage('Taxpayer code can only consist of 10 or 12 digits');
 
-        SocialInsuranceCode::isValid($code);
+        TaxpayerCode::isValid($code);
     }
 
     public static function getDataProviderForIsValid(): array
     {
         return [
-            ['00000000000'],
-            ['08765430300'],
-            ['55555500600'],
+            ['0000000000'],
+            ['7827004526'],
+
+            ['000000000000'],
+            ['760307073214'],
         ];
     }
 
@@ -86,11 +88,17 @@ class SocialInsuranceCodeTest extends TestCase
     public static function getDataProviderForIsValidWhenIncorrectCheckDigit(): array
     {
         return [
-            ['01234567890'],
-            ['12345678901'],
-            ['18765430300'],
-            ['08865430300'],
-            ['08766430300'],
+            ['0123456789'],
+            ['1234567890'],
+            ['8827004526'],
+            ['7837004526'],
+            ['7827104526'],
+
+            ['012345678901'],
+            ['123456789012'],
+            ['860307073214'],
+            ['761307073214'],
+            ['760317073214'],
         ];
     }
 
@@ -109,12 +117,15 @@ class SocialInsuranceCodeTest extends TestCase
     public static function getDataProviderForIsValidWhenInvalidLength(): array
     {
         return [
-            ['0000000000'],
-            ['0123456789'],
-            ['1234567890'],
-            ['000000000000'],
-            ['012345678901'],
-            ['123456789012'],
+            ['000000000'],
+            ['012345678'],
+            ['123456789'],
+            ['00000000000'],
+            ['01234567890'],
+            ['12345678901'],
+            ['0000000000000'],
+            ['0123456789012'],
+            ['1234567890123'],
         ];
     }
 }

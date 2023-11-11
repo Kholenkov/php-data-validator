@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kholenkov\DataValidator\Ru;
+namespace Kholenkov\DataValidator\Russia;
 
 use InvalidArgumentException;
 
